@@ -1,3 +1,11 @@
+---
+name: gen-code-naming
+description: クラス名・メソッド名・変数名などコーディングに関する命名を3〜5個提案する
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
+argument-hint: "[test]"
+---
+
 gen-code-naming/input.md を読み取り、適切なコード命名（クラス名、メソッド名、変数名）を3~5個生成してください。
 
 要件：

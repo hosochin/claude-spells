@@ -1,3 +1,11 @@
+---
+name: gen-commit-message
+description: git diff からコミットメッセージを3〜5個生成する
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
+argument-hint: "[test]"
+---
+
 gen-commit-message/input.md を読み取り、`git diff` コマンドを実行して変更内容を取得し、適切なコミットメッセージを3~5個生成してください。
 
 input.md のフォーマット：

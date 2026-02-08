@@ -1,3 +1,11 @@
+---
+name: review-text
+description: 文章の改善提案や校正を行う
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
+argument-hint: "[test]"
+---
+
 review-text/input.md に記述された文章を添削してください。
 
 input.md のフォーマット：

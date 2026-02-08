@@ -1,0 +1,16 @@
+{
+  "name": "claude-spells",
+  "owner": {
+    "name": "owner"
+  },
+  "metadata": {
+    "description": "個人用 Claude Code プラグインマーケットプレイス"
+  },
+  "plugins": [
+    {
+      "name": "common-skills",
+      "source": "./plugins/common-skills",
+      "description": "共通スキル + MCP サーバー（GitHub, Playwright, Atlassian, Context7, Slack, Serena）"
+    }
+  ]
+}

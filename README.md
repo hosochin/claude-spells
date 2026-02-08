@@ -1,86 +1,148 @@
 # Claude Spells
 
-Claude Codeのカスタムコマンド集です。日常的によく使うプロンプトを保存しています。
+個人用の Claude Code プラグインマーケットプレイスです。
+1つのプラグインをインストールするだけで、Skills と MCP サーバーがすべて使える状態になります。
 
-## 概要
+## 含まれる機能
 
-このリポジトリは、Claude Codeで頻繁に使用するプロンプトをカスタムコマンドとして管理するためのものです。
-繰り返し使うタスクをコマンド化することで、作業効率を向上させます。
+### Skills
 
-## 命名規則
+| スキル | 呼び出し | 説明 |
+|---|---|---|
+| gen-commit-message | `/common-skills:gen-commit-message` | git diff からコミットメッセージを生成 |
+| gen-branch-naming | `/common-skills:gen-branch-naming` | タスク内容からブランチ名を提案 |
+| gen-code-naming | `/common-skills:gen-code-naming` | クラス名・メソッド名・変数名を提案 |
+| gen-custom-command | `/common-skills:gen-custom-command` | 新しいスキル定義を生成 |
+| review-text | `/common-skills:review-text` | 文章の改善提案・校正 |
+| review-secret | `/common-skills:review-secret` | push 前のシークレット・個人情報漏洩チェック |
 
-- **review-**: 添削・レビュー系のコマンド
-- **gen-**: 生成系のコマンド
+### MCP サーバー
 
-## カスタムコマンド例
+| サーバー | 説明 | シークレット |
+|---|---|---|
+| github | GitHub 連携 | `GITHUB_TOKEN` |
+| playwright | ブラウザ操作 | 不要 |
+| atlassian | Jira / Confluence 連携 | OAuth（ブラウザ認証） |
+| context7 | 最新ライブラリドキュメント取得 | 不要 |
+| slack | Slack 連携 | `SLACK_BOT_TOKEN` |
+| serena | セマンティックコード解析 | 不要 |
 
-### 生成系 (gen-)
-- **gen-custom-command** - 新しいカスタムコマンドの定義を生成
-- **gen-branch-naming** - タスク内容に基づいて適切なブランチ名を提案
-- **gen-code-naming** - クラス名、メソッド名、変数名などコーディングに関する命名を提案
-- **gen-commit-message** - git diffの内容から適切なコミットメッセージを生成
+## セットアップ
 
-### 添削系 (review-)
-- **review-text** - 文章の改善提案や校正
+### 1. 環境変数の設定
+
+シークレットが必要な MCP サーバーを使う場合、事前に環境変数を設定してください。
+
+```bash
+# ~/.zshrc に追加
+export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+export SLACK_BOT_TOKEN=xoxb-xxxxxxxxxxxxxxxxxxxx
+```
+
+### 2. インストール
+
+ターミナルから以下を実行すれば完了です。
+
+```bash
+claude plugin marketplace add /path/to/claude-spells && \
+claude plugin install common-skills@claude-spells
+```
+
+これだけで Skills と MCP サーバーがすべてセットアップされます。
+
+Claude Code 内からも可能です。
+
+```
+/plugin marketplace add /path/to/claude-spells
+/plugin install common-skills@claude-spells
+```
 
 ## 使い方
 
-各カスタムコマンドは、`input.md` から入力を読み取り、`output.md` に結果を出力する構成になっています。
-
-1. 各コマンド用のディレクトリ（例：`gen-branch-naming/`）の `input.md` に内容を記述
-2. Claude Codeで `/コマンド名` を実行
-3. 結果が同じディレクトリの `output.md` に出力されます
-
-この構成により、複雑な入力内容の記述や結果のコピーが容易になります。
-
-### テスト実行
-
-全てのカスタムコマンドは `test` 引数をサポートしています。これにより、サンプルデータを使って動作確認ができます：
+### スキルの呼び出し
 
 ```
-/コマンド名 test
+# 明示的に呼び出す
+/common-skills:gen-commit-message
+/common-skills:review-text
+
+# テスト実行（sample.md を使用）
+/common-skills:gen-commit-message test
 ```
 
-`test` を指定すると、`コマンド名/sample.md` の内容を入力として実行されます。これにより：
-- コマンドの動作確認が簡単にできる
-- `sample.md` を見ながら実際の使い方を学べる
-- `sample.md` を参考に `input.md` を作成できる
+### スキルの入出力
+
+各スキルは `input.md` から入力を読み取り、`output.md` に結果を出力します。
+利用するリポジトリ側に以下のディレクトリを作成してください。
+
+```
+my-project/
+├── gen-commit-message/
+│   ├── input.md       # 入力を記述
+│   └── output.md      # 結果が出力される
+└── ...
+```
+
+## プラグイン管理コマンド
+
+### マーケットプレイス操作
+
+| コマンド | 説明 |
+|---|---|
+| `/plugin` | プラグインマネージャーを開く（Discover / Installed / Marketplaces / Errors タブ） |
+| `/plugin marketplace add <source>` | マーケットプレイスを登録 |
+| `/plugin marketplace list` | 登録済みマーケットプレイスの一覧 |
+| `/plugin marketplace update <name>` | マーケットプレイスのプラグインリストを更新 |
+| `/plugin marketplace remove <name>` | マーケットプレイスを削除（インストール済みプラグインも削除される） |
+
+### プラグイン操作
+
+| コマンド | 説明 |
+|---|---|
+| `/plugin install <plugin>@<marketplace>` | プラグインをインストール |
+| `/plugin uninstall <plugin>@<marketplace>` | プラグインをアンインストール |
+| `/plugin disable <plugin>@<marketplace>` | プラグインを無効化（アンインストールせず） |
+| `/plugin enable <plugin>@<marketplace>` | 無効化したプラグインを再有効化 |
+| `/plugin validate .` | プラグインの構成を検証 |
+
+### ターミナルから実行
+
+Claude Code 内の `/plugin` コマンドは、ターミナルから `claude plugin` でも実行できます。
+
+```bash
+claude plugin install common-skills@claude-spells
+claude plugin marketplace list
+```
 
 ## ディレクトリ構造
 
 ```
 claude-spells/
-├── .claude/
-│   └── commands/              # カスタムコマンド定義
-│       ├── gen-custom-command.md
-│       ├── gen-branch-naming.md
-│       ├── gen-code-naming.md
-│       ├── gen-commit-message.md
-│       └── review-text.md
-├── gen-custom-command/
-│   ├── input.md              # ユーザー入力
-│   ├── output.md             # 実行結果
-│   └── sample.md             # サンプル入力（test引数用）
-├── gen-branch-naming/
-│   ├── input.md
-│   ├── output.md
-│   └── sample.md
-├── gen-code-naming/
-│   ├── input.md
-│   ├── output.md
-│   └── sample.md
-├── gen-commit-message/
-│   ├── input.md
-│   ├── output.md
-│   └── sample.md
-├── review-text/
-│   ├── input.md
-│   ├── output.md
-│   └── sample.md
-├── CLAUDE.md                 # プロジェクト設定
-└── README.md
+├── .claude-plugin/
+│   └── marketplace.json              # マーケットプレイスカタログ
+├── plugins/
+│   └── common-skills/                # 全機能を含む単一プラグイン
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── .mcp.json                 # MCP サーバー設定（全サーバー）
+│       └── skills/
+│           ├── gen-commit-message/
+│           │   ├── SKILL.md
+│           │   └── sample.md
+│           ├── gen-branch-naming/
+│           ├── gen-code-naming/
+│           ├── gen-custom-command/
+│           └── review-text/
+├── docs/
+│   └── architecture.md               # アーキテクチャ設計書
+├── CLAUDE.md
+├── README.md
+└── .gitignore
 ```
 
-## 貢献
+## 命名規則
 
-新しいカスタムコマンドのアイデアや改善提案は随時追加していきます。
+スキルは目的に応じて接頭辞を付けます。
+
+- **gen-**: 生成系（例: gen-commit-message, gen-branch-naming）
+- **review-**: 添削・レビュー系（例: review-text）

@@ -1,3 +1,11 @@
+---
+name: gen-branch-naming
+description: タスク内容から適切なGitブランチ名を3〜5個提案する
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
+argument-hint: "[test]"
+---
+
 gen-branch-naming/input.md を読み取り、その内容から適切なGitブランチ名を3~5個提案してください。
 
 要件：
