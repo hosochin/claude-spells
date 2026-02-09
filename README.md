@@ -26,6 +26,7 @@
 | context7 | 最新ライブラリドキュメント取得 | 不要 |
 | slack | Slack 連携 | `SLACK_BOT_TOKEN` |
 | serena | セマンティックコード解析 | 不要 |
+| supabase | Supabase データベース管理 | `SUPABASE_ACCESS_TOKEN` |
 
 ## セットアップ
 
@@ -37,6 +38,7 @@
 # ~/.zshrc に追加
 export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
 export SLACK_BOT_TOKEN=xoxb-xxxxxxxxxxxxxxxxxxxx
+export SUPABASE_ACCESS_TOKEN=sbp_xxxxxxxxxxxxxxxxxxxx
 ```
 
 ### 2. インストール
